@@ -10,7 +10,7 @@ const HEADERS_INFO=[
 ];
 
 var roms={
-	"dd5945db9b930750cb39d00c84da8571feebf417":{//FR1.1
+	"84ee4776":{//FR1.1
 		"Faster FireRed":"https://github.com/DrMaple/Faster-FireRed/releases/download/1.3.2/Faster.FireRed.1.3.2.ips",
 		"Physical/Special Split":"https://github.com/champred/pokeemerald/releases/download/split-v1/FireRed-Phys-Spec-Split-Fixed.ips",
 		"Disable BGM":"https://github.com/dansalvato/firered-nobgm/raw/main/fireredv1.1_disable_bgm.ips",
@@ -87,7 +87,6 @@ try{
 		}
 
 		validateSource();
-		setTabApplyEnabled(true);
 		var rom=roms[el('sha1').textContent];
 		if(rom){
 			for(var p in rom){
@@ -96,6 +95,7 @@ try{
    <label>${p}</label>`;
 			}
 		}
+		setTabApplyEnabled(true);
 	};
 	webWorkerCrc.onerror = event => { // listen for events from the worker
 		setMessage('apply', event.message.replace('Error: ',''), 'error');
