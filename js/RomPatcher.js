@@ -87,7 +87,7 @@ try{
 		}
 
 		validateSource();
-		var rom=roms[el('sha1').textContent];
+		var rom=roms[el('crc32').textContent];
 		if(rom){
 			for(var p in rom){
 				el('row-file-patch').innerHTML+=`
