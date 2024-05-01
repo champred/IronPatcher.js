@@ -489,7 +489,7 @@ addEvent(window,'load',function(){
 		document.querySelectorAll('input[name="patch"]:checked').forEach(async(e)=>{
 			var file=await fetch(e.value);
 			var buf=await file.arrayBuffer();
-			patchFile=new MarcFile(this, _readPatchFile);
+			patchFile=new MarcFile(buf, _readPatchFile);
 			romFile=applyPatch(patch, romFile, false);
 		});
 		romFile.save();
