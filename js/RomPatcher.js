@@ -9,7 +9,14 @@ const HEADERS_INFO=[
 	[/\.(pce|nes|gbc?|smc|sfc|fig|swc)$/, 512, 1024]
 ];
 
-
+var roms={
+	"dd5945db9b930750cb39d00c84da8571feebf417":{//FR1.1
+		"Faster FireRed":"https://github.com/DrMaple/Faster-FireRed/releases/download/1.3.2/Faster.FireRed.1.3.2.ips",
+		"Physical/Special Split":"https://github.com/champred/pokeemerald/releases/download/split-v1/FireRed-Phys-Spec-Split-Fixed.ips",
+		"Disable BGM":"https://github.com/dansalvato/firered-nobgm/raw/main/fireredv1.1_disable_bgm.ips",
+		"Disable Low HP SFX":"https://github.com/dansalvato/firered-nobgm/raw/main/fireredv1.1_disable_low_hp_sfx.ips",
+	}
+};
 
 /* service worker */
 const FORCE_HTTPS=true;
@@ -101,6 +108,7 @@ function _(str){return (LOCALIZATION[AppSettings.langCode] && LOCALIZATION[AppSe
 
 /* custom patcher */
 function isCustomPatcherEnabled(){
+	if(document.querySelectorAll('input[name="patch"]').length)return true;
 	return typeof CUSTOM_PATCHER!=='undefined' && typeof CUSTOM_PATCHER==='object' && CUSTOM_PATCHER.length
 }
 function parseCustomPatch(customPatch){
@@ -459,6 +467,15 @@ addEvent(window,'load',function(){
 	addEvent(el('input-file-rom'), 'change', function(){
 		setTabApplyEnabled(false);
 		romFile=new MarcFile(this, _parseROM);
+		var rom=roms[el('sha1').textContent];
+		if(rom){
+			for(var p in rom){
+				el('row-file-patch').innerHTML+=`
+   <input type="checkbox" name="patch" value="${rom[p]}">
+   <label>${p}</label>`;
+			}
+			setTabApplyEnabled(true);
+		}
 	});
 	addEvent(el('checkbox-removeheader'), 'change', function(){
 		if(this.checked)
@@ -470,7 +487,13 @@ addEvent(window,'load',function(){
 		setCreatorMode(!/enabled/.test(el('switch-create').className));
 	});
 	addEvent(el('button-apply'), 'click', function(){
-		applyPatch(patch, romFile, false);
+		document.querySelectorAll('input[name="patch"]:checked').forEach(async(e)=>{
+			var file=await fetch(e.value);
+			var buf=await file.arrayBuffer();
+			patchFile=new MarcFile(this, _readPatchFile);
+			romFile=applyPatch(patch, romFile, false);
+		});
+		romFile.save();
 	});
 	addEvent(el('button-create'), 'click', function(){
 		createPatch(romFile1, romFile2, el('select-patch-type').value);
@@ -726,8 +749,8 @@ function preparePatchedRom(originalRom, patchedRom, headerSize){
 
 
 	setMessage('apply');
-	patchedRom.save();
-	
+	//patchedRom.save();
+	return patchedRom;
 	//debug: create unheadered patch
 	/*if(headerSize && el('checkbox-addheader').checked){
 		createPatch(romFile, patchedRom);
