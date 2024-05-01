@@ -11,10 +11,10 @@ const HEADERS_INFO=[
 
 var roms={
 	"84ee4776":{//FR1.1
-		"Faster FireRed":"/patches/fr1.1/Faster.FireRed.1.3.2.ips",
-		"Physical/Special Split":"/patches/fr1.1/FireRed-Phys-Spec-Split-Fixed.ips",
-		"Disable BGM":"/patches/fr1.1/fireredv1.1_disable_bgm.ips",
-		"Disable Low HP SFX":"/patches/fr1.1/fireredv1.1_disable_low_hp_sfx.ips",
+		"Faster FireRed":"/IronPatcher.js/patches/fr1.1/Faster.FireRed.1.3.2.ips",
+		"Physical/Special Split":"/IronPatcher.js/patches/fr1.1/FireRed-Phys-Spec-Split-Fixed.ips",
+		"Disable BGM":"/IronPatcher.js/patches/fr1.1/fireredv1.1_disable_bgm.ips",
+		"Disable Low HP SFX":"/IronPatcher.js/patches/fr1.1/fireredv1.1_disable_low_hp_sfx.ips",
 	}
 };
 
