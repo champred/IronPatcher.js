@@ -486,14 +486,14 @@ addEvent(window,'load',function(){
 		setCreatorMode(!/enabled/.test(el('switch-create').className));
 	});
 	addEvent(el('button-apply'), 'click', function(){
-		document.querySelectorAll('input[name="patch"]:checked').forEach(async(e)=>{
+		document.querySelectorAll('input[name="patch"]:checked').forEach(async(e,i,n)=>{
 			var file=await fetch(e.value);
 			var buf=await file.arrayBuffer();
 			patchFile=new MarcFile(buf);
 			_readPatchFile();
-			romFile=applyPatch(patch, romFile, false);
+			romFile=preparePatchedRom(romFile, patch.apply(romFile, false), headerSize);
+			if(i==n.length-1)romFile.save();
 		});
-		romFile.save();
 	});
 	addEvent(el('button-create'), 'click', function(){
 		createPatch(romFile1, romFile2, el('select-patch-type').value);
