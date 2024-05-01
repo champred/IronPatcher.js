@@ -88,6 +88,14 @@ try{
 
 		validateSource();
 		setTabApplyEnabled(true);
+		var rom=roms[el('sha1').textContent];
+		if(rom){
+			for(var p in rom){
+				el('row-file-patch').innerHTML+=`
+   <input type="checkbox" name="patch" value="${rom[p]}">
+   <label>${p}</label>`;
+			}
+		}
 	};
 	webWorkerCrc.onerror = event => { // listen for events from the worker
 		setMessage('apply', event.message.replace('Error: ',''), 'error');
@@ -467,15 +475,6 @@ addEvent(window,'load',function(){
 	addEvent(el('input-file-rom'), 'change', function(){
 		setTabApplyEnabled(false);
 		romFile=new MarcFile(this, _parseROM);
-		var rom=roms[el('sha1').textContent];
-		if(rom){
-			for(var p in rom){
-				el('row-file-patch').innerHTML+=`
-   <input type="checkbox" name="patch" value="${rom[p]}">
-   <label>${p}</label>`;
-			}
-			setTabApplyEnabled(true);
-		}
 	});
 	addEvent(el('checkbox-removeheader'), 'change', function(){
 		if(this.checked)
